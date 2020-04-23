@@ -27,6 +27,16 @@ namespace Movies
                 string json = file.ReadToEnd();
                 movies = JsonConvert.DeserializeObject<List<Movie>>(json);
             }
+            //populate the genreSet
+            HashSet<string> genreSet = new HashSet<string>();
+            foreach (Movie movie in movies)
+            {
+                if (movie.MajorGenre != null)
+                {
+                    genreSet.Add(movie.MajorGenre);
+                }
+            }
+            genres = genreSet.ToArray();
         }
 
         /// <summary>
@@ -60,7 +70,7 @@ namespace Movies
             
             //return All;
         }
-        /*
+        
 
         /// <summary>
         /// Gets the possible MPAARatings
@@ -76,6 +86,61 @@ namespace Movies
             "NC-17"
             };
         }
-        */
+
+        /// <summary>
+        /// Filters the provided collection of movies
+        /// </summary>
+        /// <param name="movies">The collection of movies to filter</param>
+        /// <param name="ratings">The ratings to include</param>
+        /// <returns>A collection containing only movies that match the filter</returns>
+        public static IEnumerable<Movie> FilterByMPAARating(IEnumerable<Movie> movies, IEnumerable<string> ratings)
+        {
+            // If no filter is specified, just return the provided collection
+            if (ratings == null || ratings.Count() == 0) return movies;
+            // Filter the supplied collection of movies
+            List<Movie> results = new List<Movie>();
+            foreach (Movie movie in movies)
+            {
+                if (movie.MPAARating != null && ratings.Contains(movie.MPAARating))
+                {
+                    results.Add(movie);
+                }
+            }
+            return results;
+
+        }
+
+        
+
+        /// <summary>
+        /// should return the proper movies when they are searched.
+        /// </summary>
+        /// <param name="movies"></param>
+        /// <param name="generes"></param>
+        /// <returns></returns>
+        public static IEnumerable<Movie> FilterByGenre(IEnumerable<Movie> movies, IEnumerable<string> generes)
+        {
+            if (generes == null || generes.Count() == 0) return movies;
+            List<Movie> results = new List<Movie>();
+            foreach (Movie movie in movies)
+            {
+                if (movie.MajorGenre != null && generes.Contains(movie.MajorGenre))
+                {
+                    results.Add(movie);
+                }
+            }
+            return results;
+        }
+
+        // The genres represented in the database
+        private static string[] genres;
+
+        /// <summary>
+        /// Gets the movie genres represented in the database 
+        /// </summary>
+        public static string[] Genres => genres;
+
+        
+
     }
 }
