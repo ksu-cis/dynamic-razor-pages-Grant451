@@ -55,7 +55,7 @@ namespace Movies.Pages
         public double? IMDBMax { get; set; }
         */
 
-        public void OnGet()
+        public void OnGet(double? IMDBMin, double? IMDBMax)
         {
             /*
             MPAARatings = Request.Query["MPAARatings"];
@@ -65,15 +65,26 @@ namespace Movies.Pages
             //var MPAARatings = Request.Query["MPAARatings"];
 
             
-            SearchTerms = Request.Query["SearchTerms"];
+            //SearchTerms = Request.Query["SearchTerms"];
             MPAARatings = Request.Query["MPAARatings"];
             //IMDBMin = double.Parse(Request.Query["IMDBMin"]);
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             
-            
+
 
             /*
+            Movies = MovieDatabase.Search(SearchTerms);
+            Movies = MovieDatabase.Search(SearchTerms);
+            Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
+            Movies = MovieDatabase.FilterByGenre(Movies, Genres);
+            Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
+            */
+
+            /*
+            // Nullable conversion workaround
+            this.IMDBMin = IMDBMin;
+            this.IMDBMax = IMDBMax;
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
