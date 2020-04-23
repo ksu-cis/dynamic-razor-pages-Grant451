@@ -10,9 +10,17 @@ namespace Movies.Pages
     public class IndexModel : PageModel
     {
 
+        /// <summary>
+        /// The movies to display on the index page 
+        /// </summary>
+        public IEnumerable<Movie> Movies { get; protected set; }
+
+        public string SearchTerms { get; set; }
+
         public void OnGet()
         {
-
+            String terms = Request.Query["SearchTerms"];
+            Movies = MovieDatabase.Search(SearchTerms);
         }
     }
 }
