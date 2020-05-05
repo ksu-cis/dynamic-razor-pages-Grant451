@@ -19,8 +19,10 @@ namespace Movies.Pages
         /// <summary>
         /// The filtered MPAA Ratings
         /// </summary>
+        [BindProperty(SupportsGet =true)]
         public string[] MPAARatings { get; set; }
 
+        [BindProperty(SupportsGet =true)]
         public string SearchTerms { get; set; }
 
         /*
@@ -64,14 +66,14 @@ namespace Movies.Pages
             */
             //var MPAARatings = Request.Query["MPAARatings"];
 
-            
+            /*
             //SearchTerms = Request.Query["SearchTerms"];
             MPAARatings = Request.Query["MPAARatings"];
             //IMDBMin = double.Parse(Request.Query["IMDBMin"]);
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             
-
+            */
 
             /*
             Movies = MovieDatabase.Search(SearchTerms);
@@ -90,6 +92,23 @@ namespace Movies.Pages
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
             */
+
+            //search movie titles for the search terms
+            Movies = MovieDatabase.All;
+            if (SearchTerms != null)
+            {
+                Movies = Movies.Where(movie => movie.Title != null && movie.Title.Contains(SearchTerms, StringComparison.CurrentCultureIgnoreCase));
+                //.Select(movie => movie.Title)
+
+                //Movies = from movie in Movies
+                //where movie.Title != null && movie.Title.Contains(SearchTerms, StringComparison.CurrentCultureIgnoreCase)
+                //select movie;
+            }
+            //filter by mpaa rating
+            if(MPAARatings != null && MPAARatings.Length != 0)
+            {
+                Movies = Movies.Where(Movie => Movie.MPAARating != null && MPAARatings.Contains(Movie.MPAARating));
+            }
         }
     }
 }
